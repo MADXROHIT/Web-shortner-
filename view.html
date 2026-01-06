@@ -1,74 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Secure View</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-}
-iframe{
-  width:100%;
-  height:100%;
-  border:none;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>View Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body style="margin:0">
+  <h2 style="text-align:center">VIEW PAGE WORKING ✅</h2>
 
-<iframe
-  id="siteFrame"
-  src="https://rgvikramjeet.netlify.app/"
-  sandbox="allow-scripts allow-forms allow-same-origin allow-popups">
-</iframe>
-
-<script>
-// URLs jo block karne hain
-const BLOCKED = [
-  "wa.me",
-  "whatsapp.com",
-  "telegram.me",
-  "t.me",
-  "youtube.com",
-  "youtu.be",
-  "instagram.com"
-];
-
-// iframe ke andar koi naya window / tab open ho
-window.addEventListener("blur", () => {
-  try {
-    const last = document.activeElement;
-    if (last && last.tagName === "IFRAME") {
-      // kuch nahi – allow
-    }
-  } catch(e){}
-});
-
-// popup / new tab block
-window.open = function(url){
-  if (BLOCKED.some(x => url.includes(x))) {
-    console.log("Blocked:", url);
-    return null;
-  }
-};
-
-// anchor hijack (fallback)
-document.addEventListener("click", function(e){
-  const a = e.target.closest("a");
-  if (!a || !a.href) return;
-
-  if (BLOCKED.some(x => a.href.includes(x))) {
-    e.preventDefault();
-    e.stopPropagation();
-    alert("Social links are disabled ❌");
-  }
-}, true);
-</script>
+  <iframe
+    src="https://rgvikramjeet.netlify.app/"
+    style="width:100%;height:90vh;border:none">
+  </iframe>
 
 </body>
 </html>

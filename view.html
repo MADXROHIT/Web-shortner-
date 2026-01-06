@@ -10,22 +10,11 @@ html,body{
   margin:0;
   padding:0;
   height:100%;
-  overflow:hidden;
 }
-
-/* iframe */
 iframe{
   width:100%;
   height:100%;
   border:none;
-}
-
-/* invisible click blocker */
-#blocker{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:transparent;
 }
 </style>
 </head>
@@ -33,21 +22,52 @@ iframe{
 <body>
 
 <iframe
+  id="siteFrame"
   src="https://rgvikramjeet.netlify.app/"
-  sandbox="allow-scripts allow-forms allow-same-origin">
+  sandbox="allow-scripts allow-forms allow-same-origin allow-popups">
 </iframe>
 
-<div id="blocker"></div>
-
 <script>
-// full click disable
-document.getElementById("blocker").addEventListener("click", e=>{
-  e.preventDefault();
-  e.stopPropagation();
+// URLs jo block karne hain
+const BLOCKED = [
+  "wa.me",
+  "whatsapp.com",
+  "telegram.me",
+  "t.me",
+  "youtube.com",
+  "youtu.be",
+  "instagram.com"
+];
+
+// iframe ke andar koi naya window / tab open ho
+window.addEventListener("blur", () => {
+  try {
+    const last = document.activeElement;
+    if (last && last.tagName === "IFRAME") {
+      // kuch nahi – allow
+    }
+  } catch(e){}
 });
 
-// disable long press / right click
-document.addEventListener("contextmenu", e=>e.preventDefault());
+// popup / new tab block
+window.open = function(url){
+  if (BLOCKED.some(x => url.includes(x))) {
+    console.log("Blocked:", url);
+    return null;
+  }
+};
+
+// anchor hijack (fallback)
+document.addEventListener("click", function(e){
+  const a = e.target.closest("a");
+  if (!a || !a.href) return;
+
+  if (BLOCKED.some(x => a.href.includes(x))) {
+    e.preventDefault();
+    e.stopPropagation();
+    alert("Social links are disabled ❌");
+  }
+}, true);
 </script>
 
 </body>

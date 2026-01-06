@@ -1,1 +1,82 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Secure View</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+}
+iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+</style>
+</head>
+
+<body>
+
+<iframe
+  id="siteFrame"
+  src="https://rgvikramjeet.netlify.app/"
+  sandbox="allow-scripts allow-forms allow-same-origin allow-popups">
+</iframe>
+
+<script>
+/* =========================
+   24 HOUR VERIFY CHECK
+========================= */
+const LIMIT = 24 * 60 * 60 * 1000;
+const verified = localStorage.getItem("verify_time");
+
+if (!verified || (Date.now() - verified > LIMIT)) {
+  localStorage.removeItem("verify_time");
+  location.replace("/"); // gate / index.html
+}
+
+/* =========================
+   SOCIAL MEDIA BLOCK
+========================= */
+const BLOCKED = [
+  "wa.me",
+  "whatsapp.com",
+  "t.me",
+  "telegram.me",
+  "youtube.com",
+  "youtu.be",
+  "instagram.com"
+];
+
+// block new tab / popup
+const oldOpen = window.open;
+window.open = function(url){
+  if (url && BLOCKED.some(x => url.includes(x))) {
+    console.log("Blocked:", url);
+    return null;
+  }
+  return oldOpen.apply(window, arguments);
+};
+
+// block clickable links (best-effort)
+document.addEventListener("click", function(e){
+  const a = e.target.closest("a");
+  if (!a || !a.href) return;
+
+  if (BLOCKED.some(x => a.href.includes(x))) {
+    e.preventDefault();
+    e.stopPropagation();
+    alert("Social media links are disabled ❌");
+  }
+}, true);
+
+// disable long-press context menu
+document.addEventListener("contextmenu", e => e.preventDefault());
+</script>
+
+</body>
+</html>

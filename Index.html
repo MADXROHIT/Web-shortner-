@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Checking Access...</title>
+<script>
+const SHORTNER = "SHORTNER_LINK_HERE";
+const IFRAME_PAGE = "view.html";
+const LIMIT = 24 * 60 * 60 * 1000;
+
+const t = localStorage.getItem("verify_time");
+
+if (t && (Date.now() - t < LIMIT)) {
+  location.replace(IFRAME_PAGE);
+} else {
+  localStorage.removeItem("verify_time");
+  location.replace(SHORTNER);
+}
+</script>
+</head>
+<body></body>
+</html>

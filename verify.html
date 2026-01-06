@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Verified</title>
+</head>
+<body>
+<h3>Verification Successful ✅</h3>
+<p>Redirecting...</p>
+
+<script>
+localStorage.setItem("verify_time", Date.now());
+setTimeout(()=>{
+  location.replace("view.html");
+}, 1200);
+</script>
+
+</body>
+</html>
